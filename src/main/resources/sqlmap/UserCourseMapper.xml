@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.su.dao.UserCourseMapper" >
+  <resultMap id="BaseResultMap" type="cn.su.pojo.UserCourse" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="coursename" property="coursename" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, username, coursename
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_course
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from user_course
+  </select>
+
+  <select id="selectUsercourse" resultMap="BaseResultMap" parameterType="cn.su.pojo.UserCourse" >
+    select
+    <include refid="Base_Column_List" />
+    from user_course
+    <where>
+    <if test="username != null" >
+      and username = #{username,jdbcType=VARCHAR}
+    </if>
+    <if test="coursename != null" >
+      and coursename = #{coursename,jdbcType=VARCHAR}
+    </if>
+  </where>
+  </select>
+
+  <select id="selectByUsername" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user_course
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByCoursename" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from user_course
+    where coursename = #{coursename,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_course
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteCourseByCoursenamelist" parameterType="java.util.List">
+    DELETE FROM user_course where coursename in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+  <insert id="insert" parameterType="cn.su.pojo.UserCourse" >
+    insert into user_course (id, username, coursename
+      )
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{coursename,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.su.pojo.UserCourse" >
+    insert into user_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="coursename != null" >
+        coursename,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="coursename != null" >
+        #{coursename,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.su.pojo.UserCourse" >
+    update user_course
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="coursename != null" >
+        coursename = #{coursename,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.su.pojo.UserCourse" >
+    update user_course
+    set username = #{username,jdbcType=VARCHAR},
+      coursename = #{coursename,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

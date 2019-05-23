@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.su.dao.ConsumlogMapper" >
+  <resultMap id="BaseResultMap" type="cn.su.pojo.Consumlog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="consumname" property="consumname" jdbcType="VARCHAR" />
+    <result column="consumdate" property="consumdate" jdbcType="DATE" />
+    <result column="csmoney" property="csmoney" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="consumtype" property="consumtype" jdbcType="VARCHAR" />
+    <result column="remainder" property="remainder" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="imghref" property="imghref" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+
+  <sql id="Base_Column_List" >
+    id, consumname, consumdate, csmoney, remark, consumtype, remainder, type, imghref
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from consumlog
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="cn.su.pojo.ConsumParam">
+    select
+    count(*)
+    from consumlog
+    <where>
+      <if test="consumname != null and consumname != '' ">
+        and  consumname = #{consumname,jdbcType=VARCHAR}
+      </if>
+      <if test="consumdate != null and consumdate != '' ">
+        and consumdate = #{consumdate,jdbcType=DATE}
+      </if>
+      <if test="csmoney != null and csmoney != '' ">
+        and csmoney = #{csmoney,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null and remark != '' ">
+        and  remark = #{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="consumtype != null and consumtype != '' ">
+        and consumtype = #{consumtype,jdbcType=VARCHAR}
+      </if>
+      <if test="remainder != null and remainder != '' ">
+        and remainder = #{remainder,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null and type != '' ">
+        and type = #{type,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+<select id="findConsumlogByPage" resultMap="BaseResultMap" parameterType="cn.su.pojo.ConsumParam" >
+  select
+  <include refid="Base_Column_List" />
+  from consumlog
+  <where>
+    <if test="consumname != null and consumname != '' ">
+      and consumname = #{consumname,jdbcType=VARCHAR}
+    </if>
+    <if test="consumdate != null and consumdate != '' ">
+      and consumdate = #{consumdate,jdbcType=DATE}
+    </if>
+    <if test="csmoney != null and csmoney != '' ">
+      and csmoney = #{csmoney,jdbcType=VARCHAR}
+    </if>
+    <if test="remark != null and remark != '' ">
+      and remark = #{remark,jdbcType=VARCHAR}
+    </if>
+    <if test="consumtype != null and consumtype != '' ">
+      and consumtype = #{consumtype,jdbcType=VARCHAR}
+    </if>
+    <if test="remainder != null and remainder != '' ">
+      and remainder = #{remainder,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null and type != '' ">
+      and type = #{type,jdbcType=VARCHAR}
+    </if>
+  </where>
+  <if test="start!=null and size!=null">
+    limit #{start},#{size}
+  </if>
+</select>
+
+
+  <delete id="delteConsumlogById" parameterType="java.util.List">
+    DELETE FROM consumlog where id in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from consumlog
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.su.pojo.Consumlog" >
+    insert into consumlog (id, consumname, consumdate, 
+      csmoney, remark, consumtype, 
+      remainder, type ,imghref)
+    values (#{id,jdbcType=INTEGER}, #{consumname,jdbcType=VARCHAR}, #{consumdate,jdbcType=DATE}, 
+      #{csmoney,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{consumtype,jdbcType=VARCHAR}, 
+      #{remainder,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{imghref,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.su.pojo.Consumlog" >
+    insert into consumlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="consumname != null" >
+        consumname,
+      </if>
+      <if test="consumdate != null" >
+        consumdate,
+      </if>
+      <if test="csmoney != null" >
+        csmoney,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="consumtype != null" >
+        consumtype,
+      </if>
+      <if test="remainder != null" >
+        remainder,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="imghref != null" >
+        imghref,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="consumname != null" >
+        #{consumname,jdbcType=VARCHAR},
+      </if>
+      <if test="consumdate != null" >
+        #{consumdate,jdbcType=DATE},
+      </if>
+      <if test="csmoney != null" >
+        #{csmoney,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="consumtype != null" >
+        #{consumtype,jdbcType=VARCHAR},
+      </if>
+      <if test="remainder != null" >
+        #{remainder,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="imghref != null" >
+        #{imghref,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.su.pojo.Consumlog" >
+    update consumlog
+    <set >
+      <if test="consumname != null" >
+        consumname = #{consumname,jdbcType=VARCHAR},
+      </if>
+      <if test="consumdate != null" >
+        consumdate = #{consumdate,jdbcType=DATE},
+      </if>
+      <if test="csmoney != null" >
+        csmoney = #{csmoney,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="consumtype != null" >
+        consumtype = #{consumtype,jdbcType=VARCHAR},
+      </if>
+      <if test="remainder != null" >
+        remainder = #{remainder,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="imghref != null" >
+        imghref = #{imghref,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.su.pojo.Consumlog" >
+    update consumlog
+    set consumname = #{consumname,jdbcType=VARCHAR},
+      consumdate = #{consumdate,jdbcType=DATE},
+      csmoney = #{csmoney,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      consumtype = #{consumtype,jdbcType=VARCHAR},
+      remainder = #{remainder,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="delImghrefValue" parameterType="java.lang.Integer" >
+    update consumlog
+    set imghref = null
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

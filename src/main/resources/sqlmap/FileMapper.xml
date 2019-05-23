@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.su.dao.FileMapper" >
+  <resultMap id="BaseResultMap" type="cn.su.pojo.File" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="DATE" />
+    <result column="createman" property="createman" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="filehref" property="filehref" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="MyResultMap" type="cn.su.pojo.File" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="DATE" />
+    <result column="createman" property="createman" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="filehref" property="filehref" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <association property="user" javaType="cn.su.pojo.User">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="userid" property="userid" jdbcType="VARCHAR" />
+      <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, filename, createtime, createman, description, filehref
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+      file.*
+    from file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="MyResultMap" >
+  SELECT
+      file.*,
+      USER.userid,
+      USER.avatar
+  FROM
+      file
+      LEFT JOIN USER ON USER.username = file.createman
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.su.pojo.File" >
+    insert into file (id, filename, createtime, 
+      createman, description, filehref, amount
+      )
+    values (#{id,jdbcType=INTEGER}, #{filename,jdbcType=VARCHAR}, #{createtime,jdbcType=DATE}, 
+      #{createman,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{filehref,jdbcType=VARCHAR},
+      #{amount,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.su.pojo.File" >
+    insert into file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createman != null" >
+        createman,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="filehref != null" >
+        filehref,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=DATE},
+      </if>
+      <if test="createman != null" >
+        #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="filehref != null" >
+        #{filehref,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.su.pojo.File" >
+    update file
+    <set >
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=DATE},
+      </if>
+      <if test="createman != null" >
+        createman = #{createman,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="filehref != null" >
+        filehref = #{filehref,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.su.pojo.File" >
+    update file
+    set filename = #{filename,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=DATE},
+      createman = #{createman,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      filehref = #{filehref,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

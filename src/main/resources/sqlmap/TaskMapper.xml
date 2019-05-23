@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.su.dao.TaskMapper" >
+  <resultMap id="BaseResultMap" type="cn.su.pojo.Task" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tasktitle" property="tasktitle" jdbcType="VARCHAR" />
+    <result column="taskdetail" property="taskdetail" jdbcType="VARCHAR" />
+    <result column="taskimg" property="taskimg" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="DATE" />
+    <result column="offeror" property="offeror" jdbcType="VARCHAR" />
+    <result column="offeree" property="offeree" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="finishtime" property="finishtime" jdbcType="DATE" />
+  </resultMap>
+
+  <resultMap id="ShowAllTask" type="cn.su.pojo.Task" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tasktitle" property="tasktitle" jdbcType="VARCHAR" />
+    <result column="taskdetail" property="taskdetail" jdbcType="VARCHAR" />
+    <result column="taskimg" property="taskimg" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="DATE" />
+    <result column="offeror" property="offeror" jdbcType="VARCHAR" />
+    <result column="offeree" property="offeree" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="finishtime" property="finishtime" jdbcType="DATE" />
+    <association property="user" javaType="cn.su.pojo.User">
+      <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="userid" property="userid" jdbcType="VARCHAR" />
+      <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    </association>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, tasktitle, taskdetail, taskimg, createtime, offeror, offeree, status, finishtime
+  </sql>
+
+  <select id="selectAllTask" resultMap="ShowAllTask">
+    SELECT
+        task.*,
+        USER.userid,
+        USER.avatar
+    FROM
+        task
+        LEFT JOIN USER ON USER.username = task.offeror
+    WHERE
+        task.STATUS = '开启'
+  </select>
+
+  <select id="selectTaskById" resultMap="ShowAllTask" parameterType="java.lang.Integer">
+    SELECT
+        task.*,
+        USER.userid,
+        USER.avatar
+    FROM
+        task
+        LEFT JOIN USER ON USER.username = task.offeror
+    WHERE
+        task.id = #{id,jdbcType=INTEGER} AND task.status != '关闭'
+  </select>
+
+  <select id="selectTaskByOfferor" resultMap="ShowAllTask" parameterType="java.lang.String" >
+    SELECT
+        task.*,
+        USER.userid,
+        USER.avatar
+    FROM
+        task
+        LEFT JOIN USER ON USER.username = task.offeror
+    WHERE
+        task.offeror =  #{offeror,jdbcType=VARCHAR} AND task.status != '关闭'
+  </select>
+  <select id="selectTaskByOfferee" resultMap="ShowAllTask" parameterType="java.lang.String" >
+    SELECT
+        task.*,
+        USER.userid,
+        USER.avatar
+    FROM
+        task
+        LEFT JOIN USER ON USER.username = task.offeror
+    WHERE
+        task.offeree =  #{offeree,jdbcType=VARCHAR} AND task.status != '关闭'
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.su.pojo.Task" >
+    insert into task (id, tasktitle, taskdetail, 
+      taskimg, createtime, offeror, 
+      offeree, status, finishtime
+      )
+    values (#{id,jdbcType=INTEGER}, #{tasktitle,jdbcType=VARCHAR}, #{taskdetail,jdbcType=VARCHAR}, 
+      #{taskimg,jdbcType=VARCHAR}, #{createtime,jdbcType=DATE}, #{offeror,jdbcType=VARCHAR}, 
+      #{offeree,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{finishtime,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.su.pojo.Task" >
+    insert into task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tasktitle != null" >
+        tasktitle,
+      </if>
+      <if test="taskdetail != null" >
+        taskdetail,
+      </if>
+      <if test="taskimg != null" >
+        taskimg,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="offeror != null" >
+        offeror,
+      </if>
+      <if test="offeree != null" >
+        offeree,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="finishtime != null" >
+        finishtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tasktitle != null" >
+        #{tasktitle,jdbcType=VARCHAR},
+      </if>
+      <if test="taskdetail != null" >
+        #{taskdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="taskimg != null" >
+        #{taskimg,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=DATE},
+      </if>
+      <if test="offeror != null" >
+        #{offeror,jdbcType=VARCHAR},
+      </if>
+      <if test="offeree != null" >
+        #{offeree,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="finishtime != null" >
+        #{finishtime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.su.pojo.Task" >
+    update task
+    <set >
+      <if test="tasktitle != null" >
+        tasktitle = #{tasktitle,jdbcType=VARCHAR},
+      </if>
+      <if test="taskdetail != null" >
+        taskdetail = #{taskdetail,jdbcType=VARCHAR},
+      </if>
+      <if test="taskimg != null" >
+        taskimg = #{taskimg,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=DATE},
+      </if>
+      <if test="offeror != null" >
+        offeror = #{offeror,jdbcType=VARCHAR},
+      </if>
+      <if test="offeree != null" >
+        offeree = #{offeree,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="finishtime != null" >
+        finishtime = #{finishtime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.su.pojo.Task" >
+    update task
+    set tasktitle = #{tasktitle,jdbcType=VARCHAR},
+      taskdetail = #{taskdetail,jdbcType=VARCHAR},
+      taskimg = #{taskimg,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=DATE},
+      offeror = #{offeror,jdbcType=VARCHAR},
+      offeree = #{offeree,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      finishtime = #{finishtime,jdbcType=DATE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
